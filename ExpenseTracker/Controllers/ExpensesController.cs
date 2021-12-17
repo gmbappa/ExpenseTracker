@@ -25,9 +25,10 @@ namespace ExpenseTracker.Controllers
         {
             try
             {
-                int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
+                 int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
                 List<Expense> lstExpense = new List<Expense>();
                 lstExpense = expenseService.GetAllExpenses(id).ToList();
+                ViewBag.TotalExpense = 0;
                 if (lstExpense.Count > 0) ViewBag.TotalExpense = expenseService.GetTotalExpense(id);
                 if (!string.IsNullOrEmpty(from))
                 {
@@ -38,8 +39,10 @@ namespace ExpenseTracker.Controllers
                     {
                         end = Convert.ToDateTime(to + " 23:59:59");
                     }
+                   
                     lstExpense = expenseService.GetSearchResult(id, start, end).ToList();
                     if (lstExpense.Count > 0) ViewBag.TotalExpense = expenseService.GetTotalExpenseByDate(id, start, end);
+                    else ViewBag.TotalExpense = 0;
                 }
                 return View(lstExpense);
             }
